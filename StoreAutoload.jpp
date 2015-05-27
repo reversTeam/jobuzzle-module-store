@@ -7,8 +7,6 @@ class StoreAutoload extends MasterAutoload {
 	onBootstrap : function () {
 		var manager = serviceLocator.get('ServiceManager');
 		var store = manager.get('store_manager_main_service');
-		if(store != undefined) 
-			console.log("y a combien de manager now ?");
 	}
 
 }
