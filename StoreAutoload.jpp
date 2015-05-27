@@ -4,6 +4,11 @@ class StoreAutoload extends MasterAutoload {
 
 	confModuleName = 'Store';
 
+	onBootstrap : function () {
+		var manager = serviceLocator.get('ServiceManager');
+		var store = manager.get('store_manager_main_service');
+	}
+
 }
 
 #export StoreAutoload;
