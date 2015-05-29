@@ -1,0 +1,13 @@
+name : example_author_main_collection
+childs :
+	example_book_main_collection:
+	# element_data_main_collection :
+	# 	data_data_main_collection :
+	# 		user_data_main_collection :
+	# 			student_data_main_collection :
+	# 			agent_data_main_collection :
+	# 				recruiter_data_main_collection :
+	# 				representant_data_main_collection : 
+	# 	link_data_main_collection :
+	# 		view_data_main_collection :
+	# 		favoris_data_main_collection : 

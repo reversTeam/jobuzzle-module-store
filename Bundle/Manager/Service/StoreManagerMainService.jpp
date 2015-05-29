@@ -3,41 +3,30 @@
 class StoreManagerMainService extends MasterService {
 
 	_sock = undefined;
+	_collection = undefined;
 
+	#default get for _collection;
 	#default get, set for _sock;
 
 	initialize : function () {
-		_super();
 		var serviceManager = serviceLocator.get("ServiceManager");
+		_super();
 		// var client_sock = serviceManager.get("client_websocket_main_service");
-		this._collections = {};
 		// this.setSock(client_sock);
 
 		this.onListen();
 	}
 
+	initCollection : function (collection) {
+		var collectionManager = serviceLocator.get('CollectionManager');
+		this._collection = collectionManager.get(collection.name);
+
+		this._collection.addChilds(collection.childs);
+	}
+
 	onListen : function () {
 		var dispatcher = serviceLocator.get("Dispatcher");
 
-		dispatcher.listen("Store:Manager:addCollection",this, this.addCollection.bind(this));
-
-		// FOR TEST REPLACE REQUEST WEBSOCKET
-		dispatcher.listen("x:x:x", this, this.onRequest.bind(this));
-		// this._sock.on("request", this, this.onRequest);
-	}
-
-	onRequest : function (s, data) {
-		console.log(data);
-	}
-
-	addCollection : function (s, data) {
-		if (!data || !data.name)
-			throw "You send a empty Collection !";
-		if (this._collections[data.name])
-			throw "Collection " + data.name + " already exists";
-
-		var collectionManger = serviceLocator.get("CollectionManager");
-		this._collections[data.name] = collectionManger.get(data.name);
 	}
 };
 
