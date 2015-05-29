@@ -1,2 +1,4 @@
 invokables :
 	store_manager_main_service : Manager/Service/StoreManagerMainService
+shared:
+	store_manager_main_service: true

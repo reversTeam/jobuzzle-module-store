@@ -4,17 +4,38 @@ class StoreManagerMainService extends MasterService {
 
 	_sock = undefined;
 	_collection = undefined;
+	_callback = {};
+	static n = 0;
 
 	#default get for _collection;
 	#default get, set for _sock;
 
 	initialize : function () {
 		var serviceManager = serviceLocator.get("ServiceManager");
-		_super();
-		// var client_sock = serviceManager.get("client_websocket_main_service");
-		// this.setSock(client_sock);
+		var client_sock = serviceManager.get("client_websocket_main_service");
 
+		_super();
+		this.setSock(client_sock);
 		this.onListen();
+	}
+
+	onListen : function () {
+		var dispatcher = serviceLocator.get("Dispatcher");
+
+		this._sock.on('request', this, this.onRequest);
+	}
+
+	onRequest : function (datas) {
+		if (datas.error != undefined)
+			return ;
+		if (datas.requestid && this._callback[datas.requestid]) {
+			this._callback[datas.requestid](datas);
+			delete this._callback[datas.requestid];
+		}
+		for (var i in datas.result) {
+			this.addInCollection(datas.result[i]);
+		}
+		console.table(datas.result);
 	}
 
 	initCollection : function (collection) {
@@ -24,10 +45,39 @@ class StoreManagerMainService extends MasterService {
 		this._collection.addChilds(collection.childs);
 	}
 
-	onListen : function () {
-		var dispatcher = serviceLocator.get("Dispatcher");
-
+	add : function (url, datas, callback) {
+		var n = ++StoreManagerMainService.n;
+		if (!datas)
+			datas = {};
+		if (typeof callback == 'function')
+			this._callback[n] = callback;
+		this._sock.send('route', {
+			route : url,
+			requestid : n,
+			params : datas
+		});
 	}
+
+	get : function (id) {
+		return this._collection.get(id);
+	}
+
+	getAll : function () {
+		return this._collection.getAll();
+	}
+
+	update : function (id, datas) {
+		this._collection.update(id, datas);
+	}
+
+	delete : function (id) {
+		this._collection.delete(id);
+	}
+
+	addInCollection : function (entity) {
+		this._collection.create(entity);
+	}
+
 };
 
 #export StoreManagerMainService;
