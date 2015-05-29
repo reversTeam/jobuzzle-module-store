@@ -14,6 +14,27 @@ class StoreAutoload extends MasterAutoload {
 		var storeService = serviceManager.get('store_manager_main_service');
 
 		storeService.initCollection(config.imbrication);
+
+		// var student = storeService.get(3);
+		// var studentCollection = storeService._collection._childs['Student'];
+
+		// var data = studentCollection.get(3);
+
+		// console.log('### GET ###');
+		// console.log('STORE : ', storeService.get(3));
+		// console.log('Student : ', studentCollection.get(3));
+		// console.log('VAR DATA : ', data);
+
+		// console.log('### UPDATE ###');
+		// console.log('STORE : ', storeService.get(3));
+		// console.log('Student : ', studentCollection.get(3));
+		// console.log('VAR DATA : ', data);
+
+		// storeService.delete(3);
+		// console.log('### DELETE ###');
+		// console.log('STORE : ', storeService.get(3));
+		// console.log('Student : ', studentCollection.get(3));
+		// console.log('VAR DATA : ', data);
 	}
 
 }
