@@ -3,42 +3,81 @@
 class StoreManagerMainService extends MasterService {
 
 	_sock = undefined;
+	_collection = undefined;
+	_callback = {};
+	static n = 0;
 
+	#default get for _collection;
 	#default get, set for _sock;
 
 	initialize : function () {
-		_super();
 		var serviceManager = serviceLocator.get("ServiceManager");
-		// var client_sock = serviceManager.get("client_websocket_main_service");
-		this._collections = {};
-		// this.setSock(client_sock);
+		var client_sock = serviceManager.get("client_websocket_main_service");
 
+		_super();
+		this.setSock(client_sock);
 		this.onListen();
 	}
 
 	onListen : function () {
 		var dispatcher = serviceLocator.get("Dispatcher");
 
-		dispatcher.listen("Store:Manager:addCollection",this, this.addCollection.bind(this));
-
-		// FOR TEST REPLACE REQUEST WEBSOCKET
-		dispatcher.listen("x:x:x", this, this.onRequest.bind(this));
-		// this._sock.on("request", this, this.onRequest);
+		this._sock.on('request', this, this.onRequest);
 	}
 
-	onRequest : function (s, data) {
-		console.log(data);
+	onRequest : function (datas) {
+		if (datas.error != undefined)
+			return ;
+		if (datas.requestid && this._callback[datas.requestid]) {
+			this._callback[datas.requestid](datas);
+			delete this._callback[datas.requestid];
+		}
+		for (var i in datas.result) {
+			this.addInCollection(datas.result[i]);
+		}
+		console.table(datas.result);
 	}
 
-	addCollection : function (s, data) {
-		if (!data || !data.name)
-			throw "You send a empty Collection !";
-		if (this._collections[data.name])
-			throw "Collection " + data.name + " already exists";
+	initCollection : function (collection) {
+		var collectionManager = serviceLocator.get('CollectionManager');
+		this._collection = collectionManager.get(collection.name);
 
-		var collectionManger = serviceLocator.get("CollectionManager");
-		this._collections[data.name] = collectionManger.get(data.name);
+		this._collection.addChilds(collection.childs);
 	}
+
+	add : function (url, datas, callback) {
+		var n = ++StoreManagerMainService.n;
+		if (!datas)
+			datas = {};
+		if (typeof callback == 'function')
+			this._callback[n] = callback;
+		this._sock.send('route', {
+			route : url,
+			requestid : n,
+			params : datas
+		});
+	}
+
+	get : function (id) {
+		return this._collection.get(id);
+	}
+
+	getAll : function () {
+		return this._collection.getAll();
+	}
+
+	update : function (id, datas) {
+		this._collection.update(id, datas);
+	}
+
+	delete : function (id) {
+		this._collection.delete(id);
+	}
+
+	addInCollection : function (entity) {
+		this._collection.create(entity);
+	}
+
 };
 
 #export StoreManagerMainService;
