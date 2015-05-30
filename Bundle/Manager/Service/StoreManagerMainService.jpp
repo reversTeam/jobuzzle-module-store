@@ -62,8 +62,8 @@ class StoreManagerMainService extends MasterService {
 		return this._collection.get(id);
 	}
 
-	getAll : function () {
-		return this._collection.getAll();
+	getAll : function (type) {
+		return this._collection.getAll(type);
 	}
 
 	update : function (id, datas) {
