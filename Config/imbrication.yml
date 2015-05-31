@@ -1,7 +1,8 @@
 name : element_data_main_collection
 childs :
 	data_data_main_collection:
-		student_data_main_collection:
+		baseuser_data_main_collection:
+			student_data_main_collection:
 	# element_data_main_collection :
 	# 	data_data_main_collection :
 	# 		user_data_main_collection :
