@@ -4,6 +4,7 @@ childs :
 		baseuser_data_main_collection:
 			student_data_main_collection:
 		nameddata_data_main_collection:
+			institute_data_main_collection:
 	# element_data_main_collection :
 	# 	data_data_main_collection :
 	# 		user_data_main_collection :
