@@ -2,10 +2,13 @@
 
 class StoreManagerMainService extends MasterService {
 
+	static n = 0;
+
 	_sock = undefined;
 	_collection = undefined;
 	_callback = {};
-	static n = 0;
+	_me = undefined;
+	_userInit = false;
 
 	#default get for _collection;
 	#default get, set for _sock;
@@ -45,7 +48,7 @@ class StoreManagerMainService extends MasterService {
 		this._collection.addChilds(collection.childs);
 	}
 
-	add : function (url, datas, callback) {
+	request : function (url, datas, callback) {
 		var n = ++StoreManagerMainService.n;
 		if (!datas)
 			datas = {};
@@ -62,6 +65,14 @@ class StoreManagerMainService extends MasterService {
 		return this._collection.get(id);
 	}
 
+	isMe : function (id) {
+		this._me = id;
+	}
+
+	getMe : function () {
+		return this.get(this._me);
+	}
+
 	getAll : function (type) {
 		return this._collection.getAll(type);
 	}
@@ -74,8 +85,16 @@ class StoreManagerMainService extends MasterService {
 		this._collection.delete(id);
 	}
 
-	addInCollection : function (entity) {
-		this._collection.create(entity);
+	addInCollection : function (datas) {
+		this._collection.create(datas);
+		if (!this._userInit && datas.id == this._me) {
+			this._userInit = true;
+			serviceLocator.get('ServiceManager')
+				.get('user_manager_main_service')
+			.init(this.get(datas.id));
+		} else if (datas.id == this._me) {
+			serviceLocator.get('Dispatcher').trigger('Store:Me:update');
+		}
 	}
 
 };
