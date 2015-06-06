@@ -29,6 +29,8 @@ class StoreManagerMainService extends MasterService {
 	}
 
 	onRequest : function (datas) {
+		var events = [];
+		var tmp = [];
 		if (datas.error != undefined)
 			return ;
 		if (datas.requestid && this._callback[datas.requestid]) {
@@ -36,9 +38,16 @@ class StoreManagerMainService extends MasterService {
 			delete this._callback[datas.requestid];
 		}
 		for (var i in datas.result) {
-			this.addInCollection(datas.result[i]);
+			tmp = this.addInCollection(datas.result[i]);
+			for (var i in tmp) {
+				if (events.indexOf(tmp[i]) == -1)
+					events.push(tmp[i]);
+			}
 		}
-		console.table(datas.result);
+		for (var i in events) {
+			dispatcher.trigger('Store:'+ events[i] +':create');
+		}
+		// console.table(datas.result);
 	}
 
 	initCollection : function (collection) {
@@ -78,6 +87,7 @@ class StoreManagerMainService extends MasterService {
 	}
 
 	update : function (id, datas) {
+		var dispatcher = serviceLocator.get('Dispatcher');
 		this._collection.update(id, datas);
 	}
 
@@ -86,15 +96,20 @@ class StoreManagerMainService extends MasterService {
 	}
 
 	addInCollection : function (datas) {
-		this._collection.create(datas);
+		var dispatcher = serviceLocator.get('Dispatcher');
+		var collection = this.getAll(datas.type);
+		var events = collection.create(datas);
+
 		if (!this._userInit && datas.id == this._me) {
 			this._userInit = true;
 			serviceLocator.get('ServiceManager')
 				.get('user_manager_main_service')
 			.init(this.get(datas.id));
+			serviceLocator.get('Dispatcher').trigger('Store:Me:update');
 		} else if (datas.id == this._me) {
 			serviceLocator.get('Dispatcher').trigger('Store:Me:update');
 		}
+		return events;
 	}
 
 };
