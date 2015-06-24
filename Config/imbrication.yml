@@ -7,3 +7,4 @@ childs :
 			institute_data_main_collection:
 				school_data_main_collection:
 				company_data_main_collection:
+			filter_data_main_collection:

@@ -29,8 +29,11 @@ class StoreManagerMainService extends MasterService {
 	}
 
 	onRequest : function (datas) {
+		console.table(datas.result);
 		var events = [];
 		var tmp = [];
+		var dispatcher = serviceLocator.get('Dispatcher');
+
 		if (datas.error != undefined)
 			return ;
 		if (datas.requestid && this._callback[datas.requestid]) {
@@ -47,7 +50,6 @@ class StoreManagerMainService extends MasterService {
 		for (var i in events) {
 			dispatcher.trigger('Store:'+ events[i] +':create');
 		}
-		// console.table(datas.result);
 	}
 
 	initCollection : function (collection) {
@@ -88,6 +90,7 @@ class StoreManagerMainService extends MasterService {
 
 	update : function (id, datas) {
 		var dispatcher = serviceLocator.get('Dispatcher');
+
 		this._collection.update(id, datas);
 	}
 
