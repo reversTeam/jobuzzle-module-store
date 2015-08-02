@@ -1,5 +1,3 @@
-#import (Config.path +'/Kernel/Service/MasterService') = MasterService;
-
 class StoreManagerMainService extends MasterService {
 
 	static n = 0;
@@ -36,10 +34,6 @@ class StoreManagerMainService extends MasterService {
 
 		if (datas.error != undefined)
 			return ;
-		if (datas.requestid && this._callback[datas.requestid]) {
-			this._callback[datas.requestid](datas);
-			delete this._callback[datas.requestid];
-		}
 		for (var i in datas.result) {
 			tmp = this.addInCollection(datas.result[i]);
 			for (var i in tmp) {
@@ -49,6 +43,10 @@ class StoreManagerMainService extends MasterService {
 		}
 		for (var i in events) {
 			dispatcher.trigger('Store:'+ events[i] +':create');
+		}
+		if (datas.requestid && this._callback[datas.requestid]) {
+			this._callback[datas.requestid](datas);
+			delete this._callback[datas.requestid];
 		}
 	}
 
@@ -115,6 +113,4 @@ class StoreManagerMainService extends MasterService {
 		return events;
 	}
 
-};
-
-#export StoreManagerMainService;
+}
