@@ -1,5 +1,3 @@
-#import (Config.path +'/Kernel/Autoload/MasterAutoload') = MasterAutoload;
-
 class StoreAutoload extends MasterAutoload {
 
 	confModuleName = 'Store';
@@ -38,5 +36,3 @@ class StoreAutoload extends MasterAutoload {
 	}
 
 }
-
-#export StoreAutoload;
