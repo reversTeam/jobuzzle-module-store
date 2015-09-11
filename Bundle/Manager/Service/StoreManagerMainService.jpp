@@ -1,3 +1,15 @@
+/**************************************************************
+*     ####         #                               #          * Jobuzzle - Copyright All rights reserved
+*     ####         #                               #          *
+*       ##  #####  ######  #     # ####### ####### #  #####   * @Author: revers
+*       ## #     # #     # #     #      #       #  # #     #  *
+*       ## #     # #     # #     #     #       #   # #     #  * @Date:   2015-08-08 11:12:49
+*       ## #     # #     # #     #    #       #    # #     #  *
+*       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
+*  ####### #     # #     # #     #  #       #      # #        *
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-11 14:47:29
+**************************************************************/
+
 class StoreManagerMainService extends MasterService {
 
 	static n = 0;
@@ -92,8 +104,8 @@ class StoreManagerMainService extends MasterService {
 		this._collection.update(id, datas);
 	}
 
-	delete : function (id) {
-		this._collection.delete(id);
+	remove : function (id) {
+		this._collection.remove(id);
 	}
 
 	addInCollection : function (datas) {
