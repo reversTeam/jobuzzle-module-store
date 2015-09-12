@@ -7,23 +7,23 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-08-08 14:32:22
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-11 21:49:17
 **************************************************************/
 
 class StoreAutoload extends MasterAutoload {
 
 	confModuleName = 'Store';
 
-	onBootstrap : function () {
+	public onBootstrap : function () {
 
 	}
 
-	init : function () {
+	public init : function () {
 		var config = Config['modules'][this.getConfModuleName()];
 		var serviceManager = serviceLocator.get('ServiceManager');
 		var storeService = serviceManager.get('store_manager_main_service');
 
-		storeService.initCollection(config.imbrication);
+		storeService.initCollection(config['imbrication']);
 
 		// var student = storeService.get(3);
 		// var studentCollection = storeService._collection._childs['Student'];
