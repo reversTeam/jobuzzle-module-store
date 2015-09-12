@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-11 14:47:29
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-12 01:51:57
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -32,14 +32,14 @@ class StoreManagerMainService extends MasterService {
 		this.onListen();
 	}
 
-	onListen : function () {
+	public onListen : function () {
 		var dispatcher = serviceLocator.get("Dispatcher");
 
 		this._sock.on('request', this, this.onRequest);
 	}
 
 	onRequest : function (datas) {
-		console.table(datas.result);
+		console['table'](datas.result);
 		var events = [];
 		var tmp = [];
 		var dispatcher = serviceLocator.get('Dispatcher');
@@ -64,9 +64,9 @@ class StoreManagerMainService extends MasterService {
 
 	initCollection : function (collection) {
 		var collectionManager = serviceLocator.get('CollectionManager');
-		this._collection = collectionManager.get(collection.name);
+		this._collection = collectionManager.get(collection['name']);
 
-		this._collection.addChilds(collection.childs);
+		this._collection.addChilds(collection['childs']);
 	}
 
 	request : function (url, datas, callback) {
@@ -82,35 +82,37 @@ class StoreManagerMainService extends MasterService {
 		});
 	}
 
-	get : function (id) {
+	public get : function (id) {
 		return this._collection.get(id);
 	}
 
-	isMe : function (id) {
+	public isMe : function (id) {
 		this._me = id;
 	}
 
-	getMe : function () {
+	public getMe : function () {
 		return this.get(this._me);
 	}
 
-	getAll : function (type) {
+	public getAll : function (type) {
 		return this._collection.getAll(type);
 	}
 
-	update : function (id, datas) {
+	public update : function (id, datas) {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
 		this._collection.update(id, datas);
 	}
 
-	remove : function (id) {
+	public remove : function (id) {
 		this._collection.remove(id);
 	}
 
 	addInCollection : function (datas) {
 		var dispatcher = serviceLocator.get('Dispatcher');
-		var collection = this.getAll(datas.type);
+		var collection = this.getAll(datas['type']);
+		if (!collection)
+			return ;
 		var events = collection.create(datas);
 
 		if (!this._userInit && datas.id == this._me) {
