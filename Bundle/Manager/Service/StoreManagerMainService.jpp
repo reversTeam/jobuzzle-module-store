@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-12 01:51:57
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-17 17:29:19
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -44,8 +44,13 @@ class StoreManagerMainService extends MasterService {
 		var tmp = [];
 		var dispatcher = serviceLocator.get('Dispatcher');
 
-		if (datas.error != undefined)
+		if (datas.error != undefined) {
+			if (datas.requestid && this._callback[datas.requestid]) {
+				this._callback[datas.requestid](datas);
+				delete this._callback[datas.requestid];
+			}
 			return ;
+		}
 		for (var i in datas.result) {
 			tmp = this.addInCollection(datas.result[i]);
 			for (var i in tmp) {
