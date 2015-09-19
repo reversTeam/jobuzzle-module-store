@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-17 17:29:19
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-19 15:18:51
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -39,20 +39,34 @@ class StoreManagerMainService extends MasterService {
 	}
 
 	onRequest : function (datas) {
-		console['table'](datas.result);
-		var events = [];
-		var tmp = [];
 		var dispatcher = serviceLocator.get('Dispatcher');
 
 		if (datas.error != undefined) {
+			console.log(datas);
 			if (datas.requestid && this._callback[datas.requestid]) {
 				this._callback[datas.requestid](datas);
 				delete this._callback[datas.requestid];
 			}
 			return ;
 		}
-		for (var i in datas.result) {
-			tmp = this.addInCollection(datas.result[i]);
+		console['table'](datas.result);
+		if (datas.event == undefined)
+			this.onCreate(datas.result);
+		else
+			this.remove(datas.result[0].id);
+		
+		if (datas.requestid && this._callback[datas.requestid]) {
+			this._callback[datas.requestid](datas);
+			delete this._callback[datas.requestid];
+		}
+	}
+
+	onCreate : function (result) {
+		var events = [];
+		var tmp = [];
+
+		for (var i in result) {
+			tmp = this.addInCollection(result[i]);
 			for (var i in tmp) {
 				if (events.indexOf(tmp[i]) == -1)
 					events.push(tmp[i]);
@@ -60,10 +74,6 @@ class StoreManagerMainService extends MasterService {
 		}
 		for (var i in events) {
 			dispatcher.trigger('Store:'+ events[i] +':create');
-		}
-		if (datas.requestid && this._callback[datas.requestid]) {
-			this._callback[datas.requestid](datas);
-			delete this._callback[datas.requestid];
 		}
 	}
 
