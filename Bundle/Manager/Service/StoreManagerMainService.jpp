@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-19 15:18:51
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-19 19:39:36
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -50,7 +50,7 @@ class StoreManagerMainService extends MasterService {
 			return ;
 		}
 		console['table'](datas.result);
-		if (datas.event == undefined)
+		if (datas.event == undefined || datas.event == 'change')
 			this.onCreate(datas.result);
 		else
 			this.remove(datas.result[0].id);
