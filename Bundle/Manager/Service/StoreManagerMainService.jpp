@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-23 12:48:58
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-23 12:54:55
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -58,7 +58,7 @@ class StoreManagerMainService extends MasterService {
 				this.onCreate(datas['result']);
 		}
 		else
-			this.remove(datas['result'][0]['id']);
+			this.remove(datas['result']['id']);
 		
 		// console['debug'](datas);
 
