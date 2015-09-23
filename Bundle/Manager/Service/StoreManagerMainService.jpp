@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-19 19:39:36
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-23 12:48:58
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -16,7 +16,7 @@ class StoreManagerMainService extends MasterService {
 
 	_sock = undefined;
 	_collection = undefined;
-	_callback = {};
+	public _callback = {};
 	_me = undefined;
 	_userInit = false;
 
@@ -41,23 +41,30 @@ class StoreManagerMainService extends MasterService {
 	onRequest : function (datas) {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
-		if (datas.error != undefined) {
+		// console['debug'](datas);
+		if (datas['error'] != undefined) {
 			console.log(datas);
-			if (datas.requestid && this._callback[datas.requestid]) {
-				this._callback[datas.requestid](datas);
-				delete this._callback[datas.requestid];
+			if (datas['requestid'] && this['_callback'][datas['requestid']]) {
+				this['_callback'][datas['requestid']](datas);
+				delete this['_callback'][datas['requestid']];
 			}
 			return ;
 		}
-		console['table'](datas.result);
-		if (datas.event == undefined || datas.event == 'change')
-			this.onCreate(datas.result);
+		// console['table'](datas['result']);
+		if (datas['event'] == undefined || datas['event'] == 'change') {
+			if (datas['result'][0] == undefined)
+				this.onCreate([datas['result']]);
+			else
+				this.onCreate(datas['result']);
+		}
 		else
-			this.remove(datas.result[0].id);
+			this.remove(datas['result'][0]['id']);
 		
-		if (datas.requestid && this._callback[datas.requestid]) {
-			this._callback[datas.requestid](datas);
-			delete this._callback[datas.requestid];
+		// console['debug'](datas);
+
+		if (datas['requestid'] && this['_callback'][datas['requestid']]) {
+			this['_callback'][datas['requestid']](datas);
+			delete this['_callback'][datas['requestid']];
 		}
 	}
 
@@ -65,6 +72,7 @@ class StoreManagerMainService extends MasterService {
 		var events = [];
 		var tmp = [];
 
+		// console.debug(result);
 		for (var i in result) {
 			tmp = this.addInCollection(result[i]);
 			for (var i in tmp) {
@@ -91,9 +99,9 @@ class StoreManagerMainService extends MasterService {
 		if (typeof callback == 'function')
 			this._callback[n] = callback;
 		this._sock.send('route', {
-			route : url,
-			requestid : n,
-			params : datas
+			'route' : url,
+			'requestid' : n,
+			'params' : datas
 		});
 	}
 
