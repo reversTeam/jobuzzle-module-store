@@ -7,7 +7,7 @@
 #       ## #     # #     # #     #    #       #    # #     #  #
 #       ## #     # #     # #     #   #       #     # ######   # @Last Modified by:   revers
 #  ####### #     # #     # #     #  #       #      # #        #
-#  ######   #####   ######  #####  ####### ####### # #######  # @Last Modified time: 2015-08-08 14:32:22
+#  ######   #####   ######  #####  ####### ####### # #######  # @Last Modified time: 2015-09-29 17:48:56
 ###############################################################
 
 name : element_data_main_collection
@@ -20,3 +20,4 @@ childs :
 				school_data_main_collection:
 				company_data_main_collection:
 			filter_data_main_collection:
+	skill_data_main_collection:
