@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-23 12:54:55
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-29 10:05:52
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -50,15 +50,12 @@ class StoreManagerMainService extends MasterService {
 			}
 			return ;
 		}
-		// console['table'](datas['result']);
+		console['table'](datas['result']);
 		if (datas['event'] == undefined || datas['event'] == 'change') {
-			if (datas['result'][0] == undefined)
-				this.onCreate([datas['result']]);
-			else
-				this.onCreate(datas['result']);
+			this.onCreate(datas['result']);
 		}
 		else
-			this.remove(datas['result']['id']);
+			this.removeAll(datas['result']);
 		
 		// console['debug'](datas);
 
@@ -125,6 +122,12 @@ class StoreManagerMainService extends MasterService {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
 		this._collection.update(id, datas);
+	}
+
+	public removeAll : function (elements) {
+		for (var i in elements) {
+			this.remove(elements[i]['id']);
+		}
 	}
 
 	public remove : function (id) {
