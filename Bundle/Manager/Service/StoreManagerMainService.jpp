@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-30 14:35:01
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-30 23:18:30
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -19,6 +19,7 @@ class StoreManagerMainService extends MasterService {
 	public _callback = {};
 	_me = undefined;
 	_userInit = false;
+	_events = {};
 
 	#default get for _collection;
 	#default get, set for _sock;
@@ -50,7 +51,7 @@ class StoreManagerMainService extends MasterService {
 			}
 			return ;
 		}
-		console['table'](datas['result']);
+		// console['table'](datas['result']);
 		if (datas['event'] == undefined || datas['event'] == 'change') {
 			this.onCreate(datas['result']);
 		}
@@ -65,11 +66,20 @@ class StoreManagerMainService extends MasterService {
 		}
 	}
 
+	sendEventCreate : function (type) {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		if (this._events[type])
+			clearTimeout(this._events[type]);
+		this._events[type] = setTimeout(function() {
+			dispatcher.trigger('Store:'+ type +':create');
+		}, 100);
+	}
+
 	onCreate : function (result) {
 		var events = [];
 		var tmp = [];
 
-		// console.debug(result);
 		for (var i in result) {
 			tmp = this.addInCollection(result[i]);
 			for (var i in tmp) {
@@ -78,7 +88,7 @@ class StoreManagerMainService extends MasterService {
 			}
 		}
 		for (var i in events) {
-			dispatcher.trigger('Store:'+ events[i] +':create');
+			this.sendEventCreate(events[i]);
 		}
 	}
 
