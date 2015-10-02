@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-30 23:18:30
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-02 18:45:07
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -25,24 +25,23 @@ class StoreManagerMainService extends MasterService {
 	#default get, set for _sock;
 
 	initialize : function () {
+		_super();
 		var serviceManager = serviceLocator.get("ServiceManager");
 		var client_sock = serviceManager.get("client_websocket_main_service");
 
-		_super();
 		this.setSock(client_sock);
-		this.onListen();
+		this._sock.on('request', this, this.onRequest);
 	}
 
 	public onListen : function () {
-		var dispatcher = serviceLocator.get("Dispatcher");
+		var dispatcher = _super();
 
-		this._sock.on('request', this, this.onRequest);
+		
 	}
 
 	onRequest : function (datas) {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
-		// console['debug'](datas);
 		if (datas['error'] != undefined) {
 			console.log(datas);
 			if (datas['requestid'] && this['_callback'][datas['requestid']]) {
@@ -51,15 +50,17 @@ class StoreManagerMainService extends MasterService {
 			}
 			return ;
 		}
-		// console['table'](datas['result']);
-		if (datas['event'] == undefined || datas['event'] == 'change') {
+		if (!datas['result'].length && datas['event'] == 'search') {
+			dispatcher.trigger('Error:url:404');
+			return ;
+		}
+
+		if (datas['event'] == undefined || datas['event'] != 'remove') {
 			this.onCreate(datas['result']);
 		}
 		else
 			this.removeAll(datas['result']);
 		
-		// console['debug'](datas);
-
 		if (datas['requestid'] && this['_callback'][datas['requestid']]) {
 			this['_callback'][datas['requestid']](datas);
 			delete this['_callback'][datas['requestid']];
