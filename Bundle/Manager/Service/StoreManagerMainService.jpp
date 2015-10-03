@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-02 18:45:07
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-03 22:56:35
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -36,7 +36,7 @@ class StoreManagerMainService extends MasterService {
 	public onListen : function () {
 		var dispatcher = _super();
 
-		
+		return dispatcher;		
 	}
 
 	onRequest : function (datas) {
@@ -50,20 +50,19 @@ class StoreManagerMainService extends MasterService {
 			}
 			return ;
 		}
-		if (!datas['result'].length && datas['event'] == 'search') {
-			dispatcher.trigger('Error:url:404');
-			return ;
+		if (datas['result'].length) {
+			if (datas['event'] == undefined || datas['event'] != 'remove') {
+				this.onCreate(datas['result']);
+			}
+			else
+				this.removeAll(datas['result']);
 		}
-
-		if (datas['event'] == undefined || datas['event'] != 'remove') {
-			this.onCreate(datas['result']);
-		}
-		else
-			this.removeAll(datas['result']);
 		
 		if (datas['requestid'] && this['_callback'][datas['requestid']]) {
 			this['_callback'][datas['requestid']](datas);
 			delete this['_callback'][datas['requestid']];
+		} else if (!datas['result'].length) {
+			dispatcher.trigger('Error:url:404');
 		}
 	}
 
