@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-03 23:49:09
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-10 12:44:28
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -40,13 +40,16 @@ class StoreManagerMainService extends MasterService {
 	}
 
 	onRequest : function (datas) {
+		var self = this;
 		var dispatcher = serviceLocator.get('Dispatcher');
 
 		if (datas['error'] != undefined) {
 			console.log(datas);
 			if (datas['requestid'] && this['_callback'][datas['requestid']]) {
-				this['_callback'][datas['requestid']](datas);
-				delete this['_callback'][datas['requestid']];
+				setTimeout(function () {
+					self['_callback'][datas['requestid']](datas);
+					delete self['_callback'][datas['requestid']];
+				}, 0);
 			}
 			return ;
 		}
@@ -59,8 +62,10 @@ class StoreManagerMainService extends MasterService {
 		}
 		
 		if (datas['requestid'] && this['_callback'][datas['requestid']]) {
-			this['_callback'][datas['requestid']](datas);
-			delete this['_callback'][datas['requestid']];
+			setTimeout(function () {
+				self['_callback'][datas['requestid']](datas);
+				delete self['_callback'][datas['requestid']];
+			}, 0);
 		} else if (!datas['result'].length) {
 			dispatcher.trigger('Error:url:404');
 		}
@@ -100,16 +105,19 @@ class StoreManagerMainService extends MasterService {
 	}
 
 	request : function (url, datas, callback) {
+		var self = this;
 		var n = ++StoreManagerMainService.n;
 		if (!datas)
 			datas = {};
 		if (typeof callback == 'function')
 			this._callback[n] = callback;
-		this._sock.send('route', {
-			'route' : url,
-			'requestid' : n,
-			'params' : datas
-		});
+		setTimeout(function () {
+			self._sock.send('route', {
+				'route' : url,
+				'requestid' : n,
+				'params' : datas
+			});
+		}, 0);
 	}
 
 	public get : function (id) {
