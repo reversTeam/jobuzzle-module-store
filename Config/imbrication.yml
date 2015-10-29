@@ -7,7 +7,7 @@
 #       ## #     # #     # #     #    #       #    # #     #  #
 #       ## #     # #     # #     #   #       #     # ######   # @Last Modified by:   revers
 #  ####### #     # #     # #     #  #       #      # #        #
-#  ######   #####   ######  #####  ####### ####### # #######  # @Last Modified time: 2015-10-18 12:35:00
+#  ######   #####   ######  #####  ####### ####### # #######  # @Last Modified time: 2015-10-28 15:17:27
 ###############################################################
 
 name : element_data_main_collection
@@ -26,6 +26,8 @@ childs :
 				studentfilter_data_main_collection:
 				companyfilter_data_main_collection:
 			project_data_main_collection:
+			challenge_data_main_collection:
 	skill_data_main_collection:
 	link_data_main_collection:
 		skilllink_data_main_collection:
+		challengelink_data_main_collection:
