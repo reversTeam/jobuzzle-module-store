@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-28 14:46:28
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-11-04 18:21:06
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -20,9 +20,11 @@ class StoreManagerMainService extends MasterService {
 	_me = undefined;
 	_userInit = false;
 	_events = {};
+	_session = undefined;
 
 	#default get for _collection;
 	#default get, set for _sock;
+	#default get, set for _session;
 
 	initialize : function () {
 		_super();
@@ -115,7 +117,8 @@ class StoreManagerMainService extends MasterService {
 			self._sock.send('route', {
 				'route' : url,
 				'requestid' : n,
-				'params' : datas
+				'params' : datas,
+				'session' : self.getSession()
 			});
 		}, 0);
 	}
