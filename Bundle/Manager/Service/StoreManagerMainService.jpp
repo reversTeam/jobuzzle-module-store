@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-11-04 18:21:06
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-11-28 11:57:35
 **************************************************************/
 
 class StoreManagerMainService extends MasterService {
@@ -113,6 +113,7 @@ class StoreManagerMainService extends MasterService {
 			datas = {};
 		if (typeof callback == 'function')
 			this._callback[n] = callback;
+
 		setTimeout(function () {
 			self._sock.send('route', {
 				'route' : url,
